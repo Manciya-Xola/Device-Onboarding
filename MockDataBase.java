@@ -21,7 +21,7 @@ public class MockDataBase
    {
       for(Device deviceItem : devices)
       {
-         if(deviceItem.getSerialNumber().equals(device.getSerialNumber()))
+         if(deviceItem.GetSerialNumber().equals(device.GetSerialNumber()))
          {
             return true;
          }
@@ -35,22 +35,37 @@ public class MockDataBase
       return devices;
    }
    
+   public int GetSizeOfDatabase()
+   {
+      return devices.size();
+   }
    
-   public void deleteDevice(Device device)
+   public Device FindDevice(String Serial_Number)
    {
       for(Device deviceItem : devices)
       {
-         if(deviceItem.getSerialNumber().equals(device.getSerialNumber()))
+         if(deviceItem.GetSerialNumber().equals(Serial_Number))
          {
-            devices.remove(device);
+            return deviceItem;
          }
       }
+      throw new NoSuchElementException();
+   }
+   
+   public void deleteDevice(Device device)
+   {
+      if (!devices.contains(device)) {
+         throw new NoSuchElementException();
+      }
+      devices.remove(device);
    }
    
    public void DeleteAllDevices()
    {
       devices.clear();
    }
+   
+   
    public boolean IsEmpty()
    {
       if(devices.size()==0)
