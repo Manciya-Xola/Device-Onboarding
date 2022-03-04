@@ -49,9 +49,33 @@ public class MockDataBase
             return deviceItem;
          }
       }
-      throw new NoSuchElementException();
+      return null;
    }
    
+   
+   public void update(Device device)
+   {
+      if(Check_If_Device_Is_In_Database(device))
+      {
+         devices.set(IndexOfDevice(device.GetSerialNumber()), device);
+         return;
+      }
+      throw new NoSuchElementException();
+   }
+   public int IndexOfDevice(String Serial_Number)
+   {
+      int index =0;
+      for(Device deviceItem : devices)
+      {
+         
+         if(deviceItem.GetSerialNumber().equals(Serial_Number))
+         {
+            return index;
+         }
+         index++;
+      }
+      return -1;
+   }
    public void deleteDevice(Device device)
    {
       if (!devices.contains(device)) {
