@@ -9,13 +9,13 @@ public class Device
    private Simcard simcard;
    private String IMEI_Number;
    private String Serial_Number;
-   private int warehouse_Number;
+   private WareHouse warehouse;
    private boolean Key_Injected;
    private boolean Sent_For_Repacking;
-   private MockKeyInjection keyInjected;
-   private MockFlashDevice Flash_Device;
+   private boolean keyInjected;
+   private boolean Flash_Device;
    
-   public Device(String Serial_Number, int box, int crate, String IMEI_Number)
+   public Device(String Serial_Number, int box, int crate,boolean damage, String IMEI_Number)
    {
       if (Serial_Number.length() != 10)
       {
@@ -25,24 +25,18 @@ public class Device
       this.box = box;
       this.crate = crate; 
       this.IMEI_Number = IMEI_Number;
-   }
-   
-   
-   
-   public void SetDamageStatus(boolean damage)
-   {
       this.damaged = damage;
    }
    
    
-   public boolean GetDamageStatus(boolean damage)
+   public boolean GetDamageStatus()
    {
       return this.damaged;
    }
    
-   public void SetWarehouse_Number(int warehouse)
+   public void SetWarehouse_Number(WareHouse warehouse)
    {
-      warehouse_Number = warehouse;
+      this.warehouse = warehouse;
    }
     
     
@@ -65,21 +59,25 @@ public class Device
    // not really sure how to implement this part
    public void DeviceFlash(MockFlashDevice flash)
    {
-      this.Flash_Device = flash;
+      this.Flash_Device = flash.FlashDevice();
    }
    
    
    public boolean Device_Is_Flashed()
    {
-      return Flash_Device.FlashDevice();
+      return Flash_Device;
    }
    
    
-   private void KeyInjection()
+   public void KeyInjection()
    {
-      keyInjected = new MockKeyInjection(0);
+      MockKeyInjection k = new MockKeyInjection(0);
+      keyInjected = k.InjectKey(new byte[128]);
    }
-   
+   public boolean Device_Key_Injected()
+   {
+   return keyInjected;
+   }
    
    public void Sent_For_Packing(boolean sent_For_Packing)
    {
@@ -90,9 +88,24 @@ public class Device
    {
    return IMEI_Number;
    }
+   
+   
    public String GetSerialNumber()
    {
       return Serial_Number;
    }
    
+   
+   public String toString()
+   {
+      return "Serial Number: "+this.Serial_Number+
+              "\nCrate: "+crate+
+              "\nBox:"+box+
+              "\nDamage status: "+damaged+
+              "\nSimcard: "+simcard+
+              "\nFlashed: "+Flash_Device+
+              "\nKey Injected: "+keyInjected+
+              "\nSent for packing: "+Sent_For_Repacking+
+              "Warehouse number: "+warehouse;
+   }
 }
